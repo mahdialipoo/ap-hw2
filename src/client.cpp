@@ -23,3 +23,7 @@ size_t Client::generate_nonce()
  {
      return (*server).get_wallet(id);
  }*/
+std::string Client::sign(std::string txt)
+{
+    return crypto::signMessage(private_key, txt);
+}
