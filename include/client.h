@@ -1,9 +1,8 @@
-#include <memory>
-#include <string>
-#include "server.h"
 #ifndef CLIENT_H
 #define CLIENT_H
-
+#include <memory>
+#include <string>
+class Server;
 class Client
 {
 public:

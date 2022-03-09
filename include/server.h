@@ -1,9 +1,9 @@
-#include <memory>
-//#include <string>
-#include <map>
 #ifndef SERVER_H
 #define SERVER_H
-
+#include <memory>
+#include <string>
+#include <map>
+class Client;
 class Server
 {
 public:
@@ -16,6 +16,6 @@ public:
      size_t mine();
 */
 private:
-    // std::map<std::shared_ptr<Client>, double> clients;
+    std::map<std::shared_ptr<Client>, double> clients;
 };
 #endif // SERVER_H
