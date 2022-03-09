@@ -1,14 +1,17 @@
+#include <memory>
+#include <string>
+#include "server.h"
 #ifndef CLIENT_H
 #define CLIENT_H
 
 class Client
 {
 public:
-    Client(std::string id, const Server &server);
-    std::string get_id();
-    std::string get_publickey();
-    double get_wallet();
-    bool transfer_money(std::string receiver, double value);
+    Client(const std::string, const Server &);
+    std::string get_id(); /*
+     std::string get_publickey();
+     double get_wallet();
+     bool transfer_money(std::string receiver, double value);*/
     size_t generate_nonce();
 
 private:

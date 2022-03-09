@@ -1,14 +1,14 @@
-
 #include <iostream>
 #include <gtest/gtest.h>
 #include "client.h"
 #include "server.h"
-
-
 int main(int argc, char **argv)
 {
     if (true) // make false to run unit-tests
     {
+        Server s{};
+        Client c{"dsd", s};
+        std::cout << c.get_id() << std::endl;
         // debug section
     }
     else
@@ -21,5 +21,5 @@ int main(int argc, char **argv)
         else
             std::cout << "FAILED" << std::endl;
     }
-    return 0;   
+    return 0;
 }
