@@ -7,7 +7,8 @@ int main(int argc, char **argv)
     if (true) // make false to run unit-tests
     {
         Server s{};
-        Client c{"dsd", s};
+        std::string o{"sjh"};
+        Client c{o, s};
         std::cout << c.generate_nonce() << std::endl;
         // debug section
     }

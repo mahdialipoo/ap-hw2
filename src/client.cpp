@@ -18,4 +18,8 @@ size_t Client::generate_nonce()
 {
     std::random_device rd;
     return rd();
-}
+} /*
+ double Client::get_wallet()
+ {
+     return server.get_wallet(id);
+ }*/
