@@ -8,10 +8,10 @@ class Client
 public:
     Client(const std::string, const Server &);
     std::string get_id();
-    std::string get_publickey(); /*
-     double get_wallet();
-     std::string sign(std::string txt);
-     bool transfer_money(std::string receiver, double value);*/
+    std::string get_publickey();
+    double get_wallet(); /*
+      std::string sign(std::string txt);
+      bool transfer_money(std::string receiver, double value);*/
     size_t generate_nonce();
 
 private:

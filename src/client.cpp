@@ -21,5 +21,5 @@ size_t Client::generate_nonce()
 } /*
  double Client::get_wallet()
  {
-     return server.get_wallet(id);
+     return (*server).get_wallet(id);
  }*/
