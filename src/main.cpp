@@ -8,7 +8,7 @@ int main(int argc, char **argv)
     {
         Server s{};
         Client c{"dsd", s};
-        std::cout << c.get_id() << std::endl;
+        std::cout << c.generate_nonce() << std::endl;
         // debug section
     }
     else

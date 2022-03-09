@@ -16,7 +16,6 @@ public:
      size_t mine();
 */
 private:
-    int x;
     // std::map<std::shared_ptr<Client>, double> clients;
 };
 #endif // SERVER_H
