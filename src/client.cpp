@@ -4,25 +4,25 @@
 #include "server.h"
 #include "crypto.h"
 #include <random>
-Client::Client(const std::string _id, const Server &_server) : server{&_server}, id{_id}
+Client::Client(std::string _id, const Server &_server) : server{&_server}, id{_id}
 {
     crypto::generate_key(public_key, private_key);
     std::cout << "construct or " << std::endl;
 }
-std::string Client::get_id()
+std::string Client::get_id() const
 {
     return id;
 }
-std::string Client::get_publickey() { return public_key; }
+std::string Client::get_publickey() const { return public_key; }
 size_t Client::generate_nonce()
 {
     std::random_device rd;
     return rd();
-} /*
- double Client::get_wallet()
- {
-     return (*server).get_wallet(id);
- }*/
+}
+double Client::get_wallet() const
+{
+    return (*server).get_wallet(id);
+}
 std::string Client::sign(std::string txt)
 {
     return crypto::signMessage(private_key, txt);
