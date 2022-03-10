@@ -27,3 +27,8 @@ std::string Client::sign(std::string txt)
 {
     return crypto::signMessage(private_key, txt);
 }
+bool Client::transfer_money(std::string receiver, double value)
+{
+    std::string trx{id + "-" + receiver + "-" + std::to_string(value)};
+    return (*server).add_pending_trx(trx, sign(trx));
+}

@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include <map>
+#include <vector>
 class Client;
 class Server
 {
@@ -11,10 +12,10 @@ public:
   std::shared_ptr<Client> add_client(std::string);
   std::shared_ptr<Client> get_client(std::string) const;
   double get_wallet(std::string) const;
-  bool parse_trx(std::string, std::string, std::string, double); /*
-bool add_pending_trx(std::string trx, std::string signature);
-size_t mine();
-*/
+  bool parse_trx(std::string &, std::string &, std::string &, double &) const;
+  bool add_pending_trx(std::string, std::string) const; /*
+  size_t mine();
+  */
 private:
   mutable std::map<std::shared_ptr<Client>, double> clients;
 };

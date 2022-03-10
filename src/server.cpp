@@ -3,6 +3,8 @@
 #include <memory>
 #include "client.h"
 #include <random>
+#include "crypto.h"
+std::vector<std::string> pending_trxs;
 Server::Server() = default;
 std::shared_ptr<Client> Server::add_client(std::string id) // incomplete
 {
@@ -36,9 +38,8 @@ double Server::get_wallet(std::string id) const
     return clients[get_client(id)];
 }
 
-bool Server::parse_trx(std::string trx, std::string sender, std::string receiver, double value)
+bool Server::parse_trx(std::string &trx, std::string &sender, std::string &receiver, double &value) const
 {
-    std::string s{sender + receiver + std::to_string(value)};
     std::string tr1{trx.substr(0, trx.find_first_of('-'))};
     std::string tr2h{trx.substr(trx.find_first_of('-') + 1, trx.length() - tr1.length() - 1)};
     std::string tr2{tr2h.substr(0, tr2h.find_first_of('-'))};
@@ -56,5 +57,19 @@ bool Server::parse_trx(std::string trx, std::string sender, std::string receiver
     {
         throw std::runtime_error("invalid pattern");
     }
-    return !(s.compare(trx));
+    receiver = tr2;
+    sender = tr1;
+    value = std::stod(tr3);
+    return true;
+}
+bool Server::add_pending_trx(std::string trx, std::string signature) const
+{
+    std::string sender{""};
+    std::string receiver{""};
+    double value{0.0};
+    bool t{parse_trx(trx, sender, receiver, value)};
+    bool authentic{crypto::verifySignature((*get_client(sender)).get_publickey(), trx, signature)};
+    if (t && authentic && value <= get_wallet(sender))
+        pending_trxs.push_back(trx);
+    return t;
 }

@@ -9,7 +9,8 @@ int main(int argc, char **argv)
         Server s{};
         std::string o{"sjh"};
         Client c{o, s};
-        std::cout << c.generate_nonce() << std::endl;
+        std::cout << c.get_publickey() << std::endl;
+        std::cout << c.sign("a") << std::endl;
         // debug section
     }
     else

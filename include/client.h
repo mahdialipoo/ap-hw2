@@ -10,8 +10,8 @@ public:
   std::string get_id() const;
   std::string get_publickey() const;
   std::string sign(std::string);
-  double get_wallet() const; /*
-     bool transfer_money(std::string receiver, double value);*/
+  double get_wallet() const;
+  bool transfer_money(std::string, double);
   size_t generate_nonce();
 
 private:
