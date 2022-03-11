@@ -78,15 +78,37 @@ bool Server::add_pending_trx(std::string trx, std::string signature) const
 size_t Server::mine() //******************incomplete
 {
     std::string mempool{""};
-    for (size_t i{}; i < pending_trxs.size() - 1; i++)
-        mempool += mempool[i];
-    for (std::map<std::shared_ptr<Client>, double>::iterator it{clients.begin()}; it != clients.end(); it++)
+    std::string hash_reward{""};
+    size_t nonce_reward{};
+    for (size_t i{}; i < pending_trxs.size(); i++)
+        mempool += pending_trxs[i];
+    do
     {
-        size_t nonce{(*(it->first)).generate_nonce()};
-        std::string test{mempool + std::to_string(nonce)};
-        std::string hash{crypto::sha256(test)};
-    }
-    return 1;
+        for (std::map<std::shared_ptr<Client>, double>::iterator it{clients.begin()}; it != clients.end(); it++)
+        {
+            size_t nonce{(*(it->first)).generate_nonce()};
+            std::string test{mempool + std::to_string(nonce)};
+            std::string hash{crypto::sha256(test)};
+            if (hash.substr(0, 10).find("000") != std::string::npos)
+            {
+                nonce_reward = nonce;
+                hash_reward = hash;
+                (it->second) += 6.25;
+                for (int i; i < pending_trxs.size(); i++)
+                {
+                    double value{};
+                    std::string sender{""};
+                    std::string receiver{""};
+                    parse_trx(pending_trxs[i], sender, receiver, value);
+                    clients[get_client(sender)] -= value;
+                    clients[get_client(receiver)] += value;
+                }
+                pending_trxs.clear();
+                return nonce_reward;
+            }
+        }
+    } while (hash_reward.substr(0, 10).find("000") == std::string::npos);
+    return nonce_reward;
 }
 void show_wallets(const Server &server)
 {
