@@ -3,6 +3,7 @@
 #include <memory>
 #include <string>
 #include "crypto.h"
+#include <vector>
 class Server;
 class Client
 {
@@ -10,7 +11,7 @@ public:
   Client(std::string, const Server &);
   std::string get_id() const;
   std::string get_publickey() const;
-  std::string sign(std::string);
+  std::string sign(std::string) const;
   double get_wallet() const;
   bool transfer_money(std::string, double);
   size_t generate_nonce();

@@ -3,7 +3,6 @@
 #include <memory>
 #include "client.h"
 #include <random>
-#include "crypto.h"
 std::vector<std::string> pending_trxs;
 Server::Server() = default;
 std::shared_ptr<Client> Server::add_client(const std::string &id)
@@ -39,7 +38,7 @@ double Server::get_wallet(std::string id) const
     return clients[get_client(id)];
 }
 
-bool Server::parse_trx(std::string &trx, std::string &sender, std::string &receiver, double &value) const
+bool Server::parse_trx(const std::string &trx, std::string &sender, std::string &receiver, double &value)
 {
     std::string tr1{trx.substr(0, trx.find_first_of('-'))};
     std::string tr2h{trx.substr(trx.find_first_of('-') + 1, trx.length() - tr1.length() - 1)};
@@ -57,6 +56,7 @@ bool Server::parse_trx(std::string &trx, std::string &sender, std::string &recei
     if (tr1.compare(tr2) == 0 || tr2.compare(tr3) == 0 || tr1.compare(tr3) == 0 || !is_double)
     {
         throw std::runtime_error("invalid pattern");
+        return false;
     }
     receiver = tr2;
     sender = tr1;
@@ -70,11 +70,12 @@ bool Server::add_pending_trx(std::string trx, std::string signature) const
     double value{0.0};
     bool t{parse_trx(trx, sender, receiver, value)};
     bool authentic{crypto::verifySignature((*get_client(sender)).get_publickey(), trx, signature)};
-    if (t && authentic && value <= get_wallet(sender))
+    bool state{t && authentic && value <= get_wallet(sender) && get_client(receiver)};
+    if (state)
         pending_trxs.push_back(trx);
-    return t;
+    return state;
 }
-size_t Server::mine() //******************هدزخئحمثفث
+size_t Server::mine() //******************incomplete
 {
     std::string mempool{""};
     for (size_t i{}; i < pending_trxs.size() - 1; i++)
@@ -86,11 +87,11 @@ size_t Server::mine() //******************هدزخئحمثفث
         std::string hash{crypto::sha256(test)};
     }
     return 1;
-} /*
- void show_wallets(const Server &server)
- {
-     std::cout << std::string(20, '*') << std::endl;
-     for (const auto &client : server.clients)
-         std::cout << client.first->get_id() << " : " << client.second << std::endl;
-     std::cout << std::string(20, '*') << std::endl;
- }*/
+}
+void show_wallets(const Server &server)
+{
+    std::cout << std::string(20, '*') << std::endl;
+    for (const auto &client : server.clients)
+        std::cout << client.first->get_id() << " : " << client.second << std::endl;
+    std::cout << std::string(20, '*') << std::endl;
+}

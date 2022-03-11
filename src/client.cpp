@@ -2,7 +2,6 @@
 #include <string>
 #include <iostream>
 #include "server.h"
-//#include "crypto.h"
 #include <random>
 Client::Client(std::string _id, const Server &_server) : server{&_server}, id{_id}
 {
@@ -22,7 +21,7 @@ double Client::get_wallet() const
 {
     return (*server).get_wallet(id);
 }
-std::string Client::sign(std::string txt)
+std::string Client::sign(std::string txt) const
 {
     return crypto::signMessage(private_key, txt);
 }
