@@ -6,28 +6,29 @@
 #include "crypto.h"
 std::vector<std::string> pending_trxs;
 Server::Server() = default;
-std::shared_ptr<Client> Server::add_client(std::string id) // incomplete
+std::shared_ptr<Client> Server::add_client(const std::string &id)
 {
-    std::shared_ptr<Client> pc{get_client(id)};
-
-    if (pc == nullptr)
+    std::string id2{id};
+    std::shared_ptr<Client> p{get_client(id2)};
+    std::random_device rd;
+    std::string rnum{};
+    while (p != nullptr)
     {
-        std::shared_ptr<Client> p{new Client{id, *this}};
-        clients.insert(std::pair<std::shared_ptr<Client>, double>(p, 5.0));
-        return p;
+        size_t num{static_cast<size_t>(9000 * (static_cast<double>(rd()) / rd.max()) + 1000)};
+        rnum = std::to_string(num);
+        id2 += rnum;
+        p = get_client(id2);
     }
-    else
-    {
-        ;
-    }
-    return pc; // mjhgj
+    std::shared_ptr<Client> p_c{new Client{id2, *this}};
+    clients.insert(std::pair<std::shared_ptr<Client>, double>(p_c, 5.0));
+    return get_client(id2);
 }
 std::shared_ptr<Client> Server::get_client(std::string id) const
 {
     std::shared_ptr<Client> p{nullptr};
     for (std::map<std::shared_ptr<Client>, double>::iterator it{clients.begin()}; it != clients.end(); it++)
 
-        if (id.compare((*(it->first)).get_id()) != 0)
+        if (id.compare((*(it->first)).get_id()) == 0)
             p = it->first;
 
     return p;
@@ -73,3 +74,23 @@ bool Server::add_pending_trx(std::string trx, std::string signature) const
         pending_trxs.push_back(trx);
     return t;
 }
+size_t Server::mine() //******************هدزخئحمثفث
+{
+    std::string mempool{""};
+    for (size_t i{}; i < pending_trxs.size() - 1; i++)
+        mempool += mempool[i];
+    for (std::map<std::shared_ptr<Client>, double>::iterator it{clients.begin()}; it != clients.end(); it++)
+    {
+        size_t nonce{(*(it->first)).generate_nonce()};
+        std::string test{mempool + std::to_string(nonce)};
+        std::string hash{crypto::sha256(test)};
+    }
+    return 1;
+} /*
+ void show_wallets(const Server &server)
+ {
+     std::cout << std::string(20, '*') << std::endl;
+     for (const auto &client : server.clients)
+         std::cout << client.first->get_id() << " : " << client.second << std::endl;
+     std::cout << std::string(20, '*') << std::endl;
+ }*/

@@ -2,15 +2,18 @@
 #include <gtest/gtest.h>
 #include "client.h"
 #include "server.h"
+void show_pending_transactions(std::vector<std::string> pending_trxs)
+{
+    std::cout << std::string(20, '*') << std::endl;
+    for (const auto &trx : pending_trxs)
+        std::cout << trx << std::endl;
+    std::cout << std::string(20, '*') << std::endl;
+}
 int main(int argc, char **argv)
 {
-    if (true) // make false to run unit-tests
+    if (false) // make false to run unit-tests
     {
-        Server s{};
-        std::string o{"sjh"};
-        Client c{o, s};
-        std::cout << c.get_publickey() << std::endl;
-        std::cout << c.sign("a") << std::endl;
+
         // debug section
     }
     else

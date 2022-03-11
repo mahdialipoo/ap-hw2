@@ -2,6 +2,7 @@
 #define CLIENT_H
 #include <memory>
 #include <string>
+#include "crypto.h"
 class Server;
 class Client
 {
