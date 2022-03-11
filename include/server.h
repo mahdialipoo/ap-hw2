@@ -3,8 +3,9 @@
 #include <memory>
 #include <string>
 #include <map>
-#include "crypto.h"
 #include <vector>
+#include <random>
+#include "crypto.h"
 extern std::vector<std::string> pending_trxs;
 class Client;
 class Server
@@ -22,4 +23,5 @@ public:
 private:
   mutable std::map<std::shared_ptr<Client>, double> clients;
 };
+void show_pending_transactions(std::vector<std::string>);
 #endif // SERVER_H

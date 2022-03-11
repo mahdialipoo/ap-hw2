@@ -2,8 +2,10 @@
 #define CLIENT_H
 #include <memory>
 #include <string>
-#include "crypto.h"
 #include <vector>
+#include <iostream>
+#include <random>
+#include "crypto.h"
 class Server;
 class Client
 {

@@ -1,8 +1,5 @@
 #include "client.h"
-#include <string>
-#include <iostream>
 #include "server.h"
-#include <random>
 Client::Client(std::string _id, const Server &_server) : server{&_server}, id{_id}
 {
     crypto::generate_key(public_key, private_key);

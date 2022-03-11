@@ -1,8 +1,5 @@
 #include "server.h"
-#include <string>
-#include <memory>
 #include "client.h"
-#include <random>
 std::vector<std::string> pending_trxs;
 Server::Server() = default;
 std::shared_ptr<Client> Server::add_client(const std::string &id)
@@ -75,9 +72,10 @@ bool Server::add_pending_trx(std::string trx, std::string signature) const
         pending_trxs.push_back(trx);
     return state;
 }
-size_t Server::mine() //******************incomplete
+size_t Server::mine()
 {
     std::string mempool{""};
+    bool hash_rew{false};
     std::string hash_reward{""};
     size_t nonce_reward{};
     for (size_t i{}; i < pending_trxs.size(); i++)
@@ -93,6 +91,7 @@ size_t Server::mine() //******************incomplete
             {
                 nonce_reward = nonce;
                 hash_reward = hash;
+                hash_rew = true;
                 (it->second) += 6.25;
                 for (int i; i < pending_trxs.size(); i++)
                 {
@@ -115,5 +114,12 @@ void show_wallets(const Server &server)
     std::cout << std::string(20, '*') << std::endl;
     for (const auto &client : server.clients)
         std::cout << client.first->get_id() << " : " << client.second << std::endl;
+    std::cout << std::string(20, '*') << std::endl;
+}
+void show_pending_transactions(std::vector<std::string> pending_trxs)
+{
+    std::cout << std::string(20, '*') << std::endl;
+    for (const auto &trx : pending_trxs)
+        std::cout << trx << std::endl;
     std::cout << std::string(20, '*') << std::endl;
 }
